@@ -1,0 +1,108 @@
+<style>
+    body, table {
+      font-family: 'Inter', sans-serif;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse !important;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    th {
+      background-color: #000 !important;
+      color: #fff !important;
+    }
+
+    td {
+      border: 1px solid #ccc !important;
+      padding: 8px 12px !important;
+    }
+
+    td > a {
+      color: black;
+    }
+
+    .addStudentButton {
+      background-color: #000;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-left: auto;
+
+      &:hover {
+          background-color: #333;
+      }
+    }
+
+    .page-link.active, .active > .page-link {
+      background-color: black !important;
+      border-color: black !important;
+    }
+
+    .pagination {
+      --bs-pagination-color: black;
+    }
+
+    .buttonAction {
+      background-color: transparent;
+      border: none;
+    }
+
+</style>
+<div class="container">
+  <h3>Gerenciamento de Alunos</h3>
+  <% if flash[:notice] %>
+    <div style="text-align: center;">
+      <span><%= flash[:notice] %><i class="bi bi-check2" style="font-weight: bold; color: green;" ></i></span>
+    </div>
+  <% end %>
+
+  <div style="display: flex;">
+    <button class="addStudentButton" data-controller="students" data-action="click->students#newStudent">
+      Cadastrar Aluno
+      <i class="bi bi-person-fill-add"></i>
+    </button>
+  </div>
+  <table class="table">
+    <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+      <% @students.each do |student| %>
+        <tr>
+          <td><%= student.id %></td>
+          <td><%= student.full_name %></td>
+          <td><%= student.email %></td>
+          <td>
+            <button href="#" data-controller="students" class="buttonAction" data-action="click->students#editStudent" data-students-student-id-value="<%= student.id %>">
+              <i class="bi bi-pencil-fill"></i>
+            </button>
+            <%= link_to '<i class="bi bi-x-circle-fill"></i>'.html_safe, student_path(student), data: { turbo_method: :delete, turbo_confirm: "Voce tem certeza que deseja excluir este aluno?" } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+    <% if @students.empty? %>
+      <tfoot>
+        <tr>
+          <td colspan="4" style="text-align: center;">Não há registros a serem exibidos.</td>
+        </tr>
+      </tfoot>
+    <% end %>
+  </table>
+  <div style="display: flex; justify-content: center;">
+    <%= will_paginate @students, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+  </div>
+</div>
+
+<%= render "student_modal", student: @student, modal_open: @modal_open %>

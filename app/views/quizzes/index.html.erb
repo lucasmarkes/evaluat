@@ -1,0 +1,114 @@
+<style>
+  body, table {
+    font-family: 'Inter', sans-serif;
+  }
+
+  table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  th {
+    background-color: #000 !important;
+    color: #fff !important;
+  }
+
+  td {
+    border: 1px solid #ccc !important;
+    padding: 8px 12px !important;
+  }
+
+  td > a {
+    color: black;
+  }
+
+  .addQuizButton {
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-left: auto;
+
+    &:hover {
+        background-color: #333;
+    }
+  }
+
+  .page-link.active, .active > .page-link {
+    background-color: black !important;
+    border-color: black !important;
+  }
+
+  .pagination {
+    --bs-pagination-color: black;
+  }
+
+  .buttonAction {
+    background-color: transparent;
+    border: none;
+  }
+</style>
+
+<div class="container">
+  <h3>Gerenciamento de Pesquisas</h3>
+  <% if flash[:notice] %>
+    <div style="text-align: center;">
+      <span><%= flash[:notice] %><i class="bi bi-check2" style="font-weight: bold; color: green;" ></i></span>
+    </div>
+  <% end %>
+
+  <div style="display: flex;">
+    <button class="addQuizButton" data-controller="quizzes" data-action="click->quizzes#newQuiz">
+      Cadastrar Pesquisa
+      <i class="bi bi-person-fill-add"></i>
+    </button>
+  </div>
+  <table class="table">
+    <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Turma</th>
+          <th>Professor</th>
+          <th>Turno</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+      <% @quizzes.each do |quiz| %>
+        <tr>
+          <td><%= quiz.id %></td>
+          <td><%= quiz.name %></td>
+          <td><%= quiz.school_class.discipline_name %></td>
+          <td><%= quiz.school_class.teacher_name %></td>
+          <td><%= quiz.school_class.shift_humanized %></td>
+          <td><%= quiz.status_humanized %></td>
+          <td>
+            <button href="#" data-controller="quizzes" class="buttonAction" data-action="click->quizzes#showQuiz" data-quizzes-quiz-id-value="<%= quiz.id %>">
+              <i class="bi bi-eye-fill"></i>
+            </button>
+            <%= link_to '<i class="bi bi-x-circle-fill"></i>'.html_safe, quiz_path(quiz), data: { turbo_method: :delete, turbo_confirm: "Voce tem certeza que deseja excluir esta pesquisa?" } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+    <% if @quizzes.empty? %>
+      <tfoot>
+        <tr>
+          <td colspan="7" style="text-align: center;">Não há registros a serem exibidos.</td>
+        </tr>
+      </tfoot>
+    <% end %>
+  </table>
+  <div style="display: flex; justify-content: center;">
+    <%= will_paginate @quizzes, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+  </div>
+</div>
+
+<%= render "quiz_modal", quiz: @quiz, modal_open: @modal_open %>

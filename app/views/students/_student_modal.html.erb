@@ -1,0 +1,65 @@
+<script>
+  function closeModal() {
+    document.getElementById("backdrop").style.display = "none"
+    document.getElementById("studentModal").style.display = "none"
+    document.getElementById("studentModal").setAttribute("data-modal-open", "false")
+    document.getElementById("studentModal").classList.remove("show")
+  }
+
+  document.addEventListener("DOMContentLoaded", (event) => {
+    var modal = document.getElementById('studentModal');
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        closeModal()
+      }
+    }
+  });
+</script>
+
+<style>
+  .close {
+    border: none;
+    background-color: transparent;
+    outline: none;
+
+    &:focus {
+      border: none;
+    }
+  }
+
+  .modal-body {
+    max-height: 80vh; overflow-y: auto;
+  }
+</style>
+
+<div class="modal fade" id="studentModal" data-modal-open="<%= @modal_open %>" tabindex="-1" aria-modal="true"
+    role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="max-height: 50%;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">Cadastrar Estudante</h5>
+                <button type="button" class="close" aria-label="Close" onclick="closeModal()">
+                    <span>X</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <%= simple_form_for @student, local: true, html: { id: 'student_form' } do |f| %>
+                  <%= f.simple_fields_for :user do |user| %>
+                    <%= user.hidden_field :id  %>
+                    <%= user.input :first_name %>
+                    <%= user.input :last_name %>
+                    <%= user.input :email %>
+                  <% end %>
+                  <%= f.input :registration_number, input_html: { type: 'number' } %>
+                  <%= f.input :document_number, input_html: { data: {controller: "cpf-input-mask"} } %>
+                <% end %>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Fechar</button>
+                <input type="submit" form="student_form" value="Salvar" class="btn btn-primary"/>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop fade show" id="backdrop" style="display: none;"></div>

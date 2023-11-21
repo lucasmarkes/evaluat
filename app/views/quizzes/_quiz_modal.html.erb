@@ -1,0 +1,70 @@
+<script>
+  function closeModal() {
+    document.getElementById("backdrop").style.display = "none"
+    document.getElementById("quizModal").style.display = "none"
+    document.getElementById("quizModal").setAttribute("data-modal-open", "false")
+    document.getElementById("quizModal").classList.remove("show")
+  }
+
+  document.addEventListener("DOMContentLoaded", (event) => {
+    var modal = document.getElementById('quizModal');
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        closeModal()
+      }
+    }
+  });
+</script>
+
+<style>
+  .close {
+    border: none;
+    background-color: transparent;
+    outline: none;
+
+    &:focus {
+      border: none;
+    }
+  }
+
+  .modal-body {
+    max-height: 80vh; overflow-y: auto;
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="modal fade" id="quizModal" data-modal-open="<%= @modal_open %>" tabindex="-1" aria-modal="true"
+    role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="max-height: 50%;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-title">Cadastrar Pesquisa</h5>
+                <button type="button" class="close" aria-label="Close" onclick="closeModal()">
+                    <span>X</span>
+                </button>
+            </div>
+            <div class="modal-body">
+              <%= simple_form_for quiz, local: true, html: { id: 'quiz_form', data: { turbo: "false" } } do |f| %>
+                <%= f.input :name %>
+                <%= f.input :school_class_id, as: :select, collection: [],
+                    input_html: { id: "list-school-class",
+                    data: {controller: "tom-select", "tom-select-url-value": "#{search_school_classes_path}?name=",
+                    "tom-select-label-field-value": "discipline_name",
+                    "tom-select-second-label-title-value": "Professor",
+                    "tom-select-second-label-field-value": "teacher_name",
+                    "tom-select-search-field-value": "discipline_name",
+                    "tom-select-selected-options-value": {}.to_json} }, selected: [] %>
+                <div id="result_metrics" class="col-12">
+                  <canvas id="resultMetricsBarChart"></canvas>
+                </div>
+              <% end %>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Fechar</button>
+                <input id="btn_submit_quiz_form" type="submit" form="quiz_form" value="Salvar" class="btn btn-primary"/>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-backdrop fade show" id="backdrop" style="display: none;"></div>

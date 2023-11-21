@@ -1,0 +1,18 @@
+<% if flash[:notice] %>
+  <div style="text-align: center;">
+    <span><%= flash[:notice] %><i class="bi bi-check2" style="font-weight: bold; color: green;" ></i></span>
+  </div>
+<% end %>
+<div class="container">
+  <h1>Olá, <%= current_user.full_name %></h1>
+  <% if current_user.student? %>
+    <% if !current_user.student.pending_quiz_feedbacks.empty? %>
+      <div style="text-align: center;">
+        <h5>Você tem pesquisas pendentes para responder.</h5>
+        <h2><%= link_to 'Abrir quiz', quiz_answer_quiz_path(@quiz), class: "btn btn-primary" %></h2>
+      </div>
+    <% else %>
+      <h1>Não tem pesquisas pendentes</h1>
+    <% end %>
+  <% end %>
+</div>

@@ -1,0 +1,71 @@
+pt-BR:
+  activerecord:
+    models:
+      student: Aluno
+      user: Usuario
+      school_class: Sala de aula
+    attributes:
+      student:
+        registration_number: Número de Registro
+        document_number: Número de Documento
+      user:
+        first_name: "Nome"
+        last_name: "Sobrenome"
+        email: "E-mail"
+        password: "Senha"
+      school_class:
+        discipline_name: "Nome da Disciplina"
+        teacher_name: "Nome do Professor"
+        shift: "Turno"
+        students: "Estudantes"
+        course: "Curso"
+      quiz:
+        name: "Nome"
+        questions: "Questões"
+        status: "Status"
+        school_class: "Sala de aula"
+        school_class_id: "Sala de aula"
+    errors:
+      models:
+        user:
+          attributes:
+            first_name:
+              blank: "não pode ficar em branco"
+            last_name:
+              blank: "não pode ficar em branco"
+            email:
+              blank: "não pode ficar em branco"
+            password:
+              blank: "não pode ficar em branco"
+        student:
+          attributes:
+            registration_number:
+              blank: "não pode ficar em branco"
+            document_number:
+              blank: "não pode ficar em branco"
+        school_class:
+          attributes:
+            discipline_name:
+              blank: "não pode ficar em branco"
+            teacher_name:
+              blank: "não pode ficar em branco"
+            shift:
+              blank: "não pode ficar em branco"
+            students:
+              blank: "não pode ficar em branco"
+            course:
+              blank: "não pode ficar em branco"
+        quiz:
+          attributes:
+            name:
+              blank: "não pode ficar em branco"
+            questions:
+              blank: "não pode ficar em branco"
+            status:
+              blank: "não pode ficar em branco"
+            school_class:
+              blank: "não pode ficar em branco"
+            school_class_id:
+              blank: "não pode ficar em branco"
+
+

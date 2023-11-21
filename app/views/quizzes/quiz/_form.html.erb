@@ -1,0 +1,112 @@
+<style>
+.rating {
+    float:left;
+}
+
+.rating:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+    clip:rect(0,0,0,0);
+}
+
+.rating:not(:checked) > label {
+    float:right;
+    width:1.2em;
+    padding:0 .1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:200%;
+    line-height:1.2;
+    color:#ddd;
+    text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating:not(:checked) > label:before {
+    content: '★ ';
+}
+
+.rating > input:checked ~ label {
+    color: #f70;
+    text-shadow:1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating:not(:checked) > label:hover,
+.rating:not(:checked) > label:hover ~ label {
+    color: gold;
+    text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+    color: #ea0;
+    text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+}
+
+.rating > label:active {
+    position:relative;
+    top:2px;
+    left:2px;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+#status, button {
+    margin: 20px 0;
+}
+
+.form {
+  > button {
+    margin-left: auto;
+  }
+}
+
+</style>
+
+<div style="display: flex; justify-content: center;">
+  <div data-controller="answer-quiz">
+    <div style="display: flex; flex-direction: column;">
+      <span><strong>Nome da pesquisa:</strong> <%= quiz.name %></span>
+      <span><strong>Disciplina:</strong> <%= quiz.school_class.discipline_name %></span>
+      <span><strong>Nome do Professor:</strong> <%= quiz.school_class.teacher_name %></span>
+    </div>
+    <br />
+    <input type="hidden" name="quiz_questions_quantity" id="quiz_questions_quantity" value="<%= quiz.questions.size %>" />
+    <%= simple_form_for quiz, method: :post, url: quiz_finish_quiz_path(quiz_id: quiz.id), html: { id: 'quiz_form', class: "form" } do |f| %>
+      <%= f.hidden_field :quiz_id, value: quiz.id %>
+      <%= f.hidden_field :quiz_feedback_id, value: quiz_feedback.id %>
+      <div style="display: flex; flex-direction: column;">
+      <% f.object.questions.each_with_index do |question, index| %>
+        <div style="display: flex; flex-direction: column;">
+          <span><%= question["text"] %></span>
+          <div>
+          <fieldset class="rating">
+            <input type="hidden" name="quiz[questions][<%= index %>][question_id]" value="<%=question["id"] %>" />
+            <% [5, 4, 3, 2, 1].each do |star_number| %>
+              <%= radio_button "quiz[questions][#{index}]", :answer, star_number, id: "question_#{question["id"]}_star_#{star_number}", value: star_number %>
+              <label for="<%= "question_#{question["id"]}_star_#{star_number}" %>"></label>
+            <% end %>
+          </fieldset>
+          </div>
+        </div>
+      <% end %>
+      </div>
+      <br />
+      <%= f.submit 'Enviar resposta', class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>

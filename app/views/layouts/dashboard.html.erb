@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Evaluate</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+
+    <style>
+      body, .navbar {
+          font-family: 'Inter', sans-serif;
+      }
+
+      .navbar-brand {
+        color: #ccc;
+        transition: color 0.3s;
+        margin-left: 10px;
+      }
+      .navbar-light .navbar-light, .nav-link {
+          color: #ccc;
+          transition: color 0.3s;
+      }
+      .navbar-light .nav-link:hover,
+      .navbar-light .navbar-brand:hover {
+          color: black !important;
+      }
+      .navbar-light .navbar-toggler-icon {
+          background-color: transparent;
+      }
+      .navbar {
+          background-color: #000;
+      }
+      .navbar-light .navbar-toggler {
+          border-color: #ccc;
+      }
+      .navbar-toggler {
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" data-controller="dashboard">
+      <a class="navbar-brand" href="#">
+        <%= image_tag("evaluate.svg", alt: "logo") %>
+      </a>
+      <button id="menuToggle" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <% menu_links.each do |link| %>
+            <%= build_menu_link(link) %>
+          <% end %>
+          <li class="nav-item">
+            <%= link_to "Sair", destroy_user_session_path, method: :delete, class: "nav-link"  %>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div style="margin-top: 10px;">
+      <%= yield %>
+    </div>
+  </body>
+</html>
